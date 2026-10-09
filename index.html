@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday, Tuba! 🎂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Particle / effects canvas -->
+  <canvas id="fx-canvas" aria-hidden="true"></canvas>
+
+  <!-- Soft background décor -->
+  <div class="bg-decor" aria-hidden="true">
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+    <div class="star star-1">✦</div>
+    <div class="star star-2">✧</div>
+    <div class="star star-3">✦</div>
+    <div class="star star-4">✧</div>
+    <div class="star star-5">✦</div>
+  </div>
+
+  <!-- Custom cursor trail host -->
+  <div id="cursor-trail" aria-hidden="true"></div>
+
+  <!-- Floating controls -->
+  <div class="controls">
+    <button type="button" id="btn-sound" class="ctrl-btn" aria-label="Toggle sound" title="Sound">🔊</button>
+  </div>
+
+  <!-- 1. Welcome / gift screen -->
+  <div id="welcome" class="welcome">
+    <div class="welcome-inner">
+      <p class="welcome-hint">A little surprise awaits…</p>
+      <button type="button" id="gift-box" class="gift-box" aria-label="Tap to open gift">
+        <div class="gift-lid">
+          <div class="gift-bow"></div>
+        </div>
+        <div class="gift-body">
+          <span class="gift-ribbon"></span>
+        </div>
+        <span class="gift-label">Tap to open 🎁</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main content (hidden until gift opens) -->
+  <main id="main" class="main" hidden>
+    <!-- 2. Hero -->
+    <section class="section hero" id="hero">
+      <div class="hero-card">
+        <p class="hero-eyebrow">today is all about</p>
+        <h1 class="hero-title" aria-live="polite">
+          <span id="hero-line" class="hero-line"></span>
+          <span id="hero-name" class="hero-name"></span>
+        </h1>
+        <p class="hero-sub reveal">Wishing you the softest, sweetest day ✨</p>
+        <p class="balloon-counter reveal">Balloons popped: <span id="pop-count">0</span></p>
+      </div>
+      <div id="balloon-layer" class="balloon-layer" aria-hidden="true"></div>
+    </section>
+
+    <!-- 3. Cake -->
+    <section class="section cake-section reveal" id="cake-section">
+      <h2 class="section-title">Blow out the candles</h2>
+      <p class="section-sub">Make a wish &amp; blow 🌬️</p>
+      <div class="cake-wrap">
+        <svg id="cake-svg" class="cake-svg" viewBox="0 0 280 220" role="img" aria-label="Birthday cake with candles">
+          <!-- plate -->
+          <ellipse cx="140" cy="200" rx="110" ry="14" fill="#f8d4e0" />
+          <!-- bottom tier -->
+          <rect x="50" y="140" width="180" height="55" rx="18" fill="#ffc4d6" />
+          <ellipse cx="140" cy="140" rx="90" ry="16" fill="#ffd6e4" />
+          <ellipse cx="140" cy="195" rx="90" ry="14" fill="#ffb3c9" />
+          <!-- frosting drips -->
+          <path d="M55 150 Q70 175 85 150 Q100 175 115 150 Q130 175 145 150 Q160 175 175 150 Q190 175 205 150 Q220 175 225 150" fill="none" stroke="#fff0f5" stroke-width="10" stroke-linecap="round" />
+          <!-- top tier -->
+          <rect x="85" y="95" width="110" height="50" rx="16" fill="#e8d5ff" />
+          <ellipse cx="140" cy="95" rx="55" ry="12" fill="#f0e4ff" />
+          <ellipse cx="140" cy="145" rx="55" ry="11" fill="#d9bfff" />
+          <!-- cherries / sprinkles -->
+          <circle cx="110" cy="108" r="4" fill="#ff6b8a" />
+          <circle cx="140" cy="102" r="4" fill="#7ec8e3" />
+          <circle cx="170" cy="110" r="4" fill="#b8f2c0" />
+          <circle cx="125" cy="120" r="3" fill="#ffd6a5" />
+          <circle cx="155" cy="118" r="3" fill="#ffb3c9" />
+          <!-- candles group filled by JS -->
+          <g id="candles-group"></g>
+        </svg>
+        <p id="wish-msg" class="wish-msg" hidden>Your wish is on its way! ✨</p>
+        <div class="cake-actions">
+          <button type="button" id="btn-blow" class="btn squish">Make a wish &amp; blow 🌬️</button>
+          <button type="button" id="btn-mic" class="btn btn-soft squish">Blow with mic 🎤</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Quotes carousel -->
+    <section class="section quotes-section reveal" id="quotes-section">
+      <h2 class="section-title">Little wishes for you</h2>
+      <p class="section-sub">Tap a card to flip it 💌</p>
+      <div class="carousel">
+        <button type="button" id="carousel-prev" class="carousel-nav squish" aria-label="Previous">‹</button>
+        <div class="carousel-stage">
+          <div id="flip-card" class="flip-card" tabindex="0" role="button" aria-label="Flip wish card">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <span class="quote-emoji" id="quote-emoji">🎂</span>
+                <p id="quote-front" class="quote-text"></p>
+              </div>
+              <div class="flip-face flip-back">
+                <p id="quote-back" class="quote-text"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" id="carousel-next" class="carousel-nav squish" aria-label="Next">›</button>
+      </div>
+      <div class="carousel-dots" id="carousel-dots" aria-hidden="true"></div>
+    </section>
+
+    <!-- 5. Wish jar -->
+    <section class="section jar-section reveal" id="jar-section">
+      <h2 class="section-title">Shake the wish jar</h2>
+      <p class="section-sub">Tap the jar for a secret note 🫙</p>
+      <div class="jar-area">
+        <button type="button" id="wish-jar" class="wish-jar" aria-label="Shake the wish jar">
+          <svg viewBox="0 0 160 200" class="jar-svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.55)" />
+                <stop offset="100%" stop-color="rgba(200,230,255,0.25)" />
+              </linearGradient>
+              <clipPath id="jar-clip">
+                <path d="M35 55 Q30 70 30 100 L30 165 Q30 185 80 185 Q130 185 130 165 L130 100 Q130 70 125 55 Z" />
+              </clipPath>
+            </defs>
+            <!-- lid -->
+            <rect x="40" y="28" width="80" height="18" rx="6" fill="#ffb3c9" />
+            <rect x="50" y="18" width="60" height="14" rx="5" fill="#ffc4d6" />
+            <!-- jar body -->
+            <path d="M35 55 Q30 70 30 100 L30 165 Q30 185 80 185 Q130 185 130 165 L130 100 Q130 70 125 55 Z" fill="url(#glass)" stroke="#a8d4f0" stroke-width="3" />
+            <!-- contents -->
+            <g clip-path="url(#jar-clip)" id="jar-bits">
+              <text x="50" y="120" font-size="18">💖</text>
+              <text x="80" y="100" font-size="16">⭐</text>
+              <text x="60" y="150" font-size="14">💗</text>
+              <text x="95" y="140" font-size="16">✨</text>
+              <text x="70" y="80" font-size="14">💕</text>
+              <text x="100" y="115" font-size="14">🌟</text>
+              <text x="45" y="95" font-size="12">💜</text>
+              <text x="85" y="165" font-size="14">🧡</text>
+            </g>
+            <!-- glass shine -->
+            <path d="M42 70 Q40 100 42 150" stroke="rgba(255,255,255,0.5)" stroke-width="4" fill="none" stroke-linecap="round" />
+          </svg>
+          <span class="jar-label">Shake me!</span>
+        </button>
+        <div id="jar-note" class="jar-note" hidden>
+          <p id="jar-note-text"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Surprise buttons -->
+    <section class="section surprise-section reveal" id="surprise-section">
+      <h2 class="section-title">Surprise buttons</h2>
+      <p class="section-sub">Pick your party power-up</p>
+      <div class="surprise-row">
+        <button type="button" class="btn squish" data-surprise="confetti">Confetti 🎉</button>
+        <button type="button" class="btn squish" data-surprise="hearts">Hearts 💖</button>
+        <button type="button" class="btn squish" data-surprise="fireworks">Fireworks 🎆</button>
+        <button type="button" class="btn squish" data-surprise="party">Party mode 🪩</button>
+      </div>
+    </section>
+
+    <!-- 7. Envelope / letter -->
+    <section class="section letter-section reveal" id="letter-section">
+      <h2 class="section-title">A letter for you</h2>
+      <p class="section-sub">Open the envelope ✉️</p>
+      <div class="envelope-wrap">
+        <button type="button" id="envelope" class="envelope" aria-label="Open the letter">
+          <div class="env-flap"></div>
+          <div class="env-body"></div>
+          <div class="env-heart">💌</div>
+        </button>
+        <div id="letter" class="letter" hidden>
+          <p id="letter-text" class="letter-text"></p>
+          <p id="letter-sign" class="letter-sign"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Footer -->
+    <footer class="footer reveal">
+      <p id="footer-text">Made with 💕</p>
+      <button type="button" id="btn-replay" class="btn btn-soft squish">Replay surprise</button>
+    </footer>
+  </main>
+
+  <!-- Giant balloon easter egg -->
+  <div id="giant-balloon" class="giant-balloon" aria-hidden="true" hidden>
+    <svg viewBox="0 0 120 160" width="120" height="160">
+      <ellipse cx="60" cy="55" rx="48" ry="55" fill="#ff9ec8" />
+      <ellipse cx="42" cy="35" rx="12" ry="18" fill="rgba(255,255,255,0.35)" />
+      <polygon points="54,108 66,108 60,120" fill="#ff9ec8" />
+      <path d="M60 120 Q55 140 62 160" stroke="#c9a0dc" stroke-width="2" fill="none" />
+    </svg>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
