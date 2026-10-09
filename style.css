@@ -516,15 +516,24 @@ body.party-mode .wish-jar {
   width: 100%;
 }
 
+.hero-line,
+.hero-name {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: baseline;
+  width: 100%;
+  white-space: nowrap;
+}
+
 .hero-line {
-  display: block;
   font-size: clamp(1.55rem, 6.5vw, 2.35rem);
   font-weight: 600;
   color: var(--text);
 }
 
 .hero-name {
-  display: block;
   font-size: clamp(2.8rem, 14vw, 4.6rem);
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -539,6 +548,7 @@ body.party-mode .wish-jar {
 
 .hero-title .letter {
   display: inline-block;
+  flex: 0 0 auto;
   opacity: 0;
   transform: translateY(30px);
   animation: letterIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
@@ -547,6 +557,7 @@ body.party-mode .wish-jar {
 
 .hero-title .letter.space {
   width: 0.3em;
+  min-width: 0.3em;
 }
 
 .hero-title .letter:hover {
