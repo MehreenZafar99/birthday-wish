@@ -438,7 +438,6 @@ function popBalloon(el, e) {
   el.classList.add("popping");
   playPop();
   state.balloonsPopped += 1;
-  $("#pop-count").textContent = state.balloonsPopped;
 
   const rect = el.getBoundingClientRect();
   const x = rect.left + rect.width / 2;
@@ -796,7 +795,6 @@ function initFooter() {
     $("#letter-sign").textContent = "";
     $("#jar-note").hidden = true;
     state.balloonsPopped = 0;
-    $("#pop-count").textContent = "0";
     state.nameClicks = 0;
 
     // Show welcome again
