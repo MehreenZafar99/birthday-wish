@@ -546,7 +546,7 @@ body.party-mode .wish-jar {
   margin: 0.15rem 0 0.35rem;
 }
 
-.hero-title .letter {
+.hero-title .bounce-letter {
   display: inline-block;
   flex: 0 0 auto;
   opacity: 0;
@@ -555,20 +555,20 @@ body.party-mode .wish-jar {
   transition: transform 0.25s ease;
 }
 
-.hero-title .letter.space {
+.hero-title .bounce-letter.space {
   width: 0.3em;
   min-width: 0.3em;
 }
 
-.hero-title .letter:hover {
+.hero-title .bounce-letter:hover {
   animation: wiggle 0.5s ease;
 }
 
-.hero-line .letter:hover {
+.hero-line .bounce-letter:hover {
   color: var(--pink-deep);
 }
 
-.hero-name .letter:hover {
+.hero-name .bounce-letter:hover {
   filter: brightness(1.1);
 }
 

@@ -355,7 +355,7 @@ function fillLetters(host, text, startDelay, onLetter) {
   let delay = startDelay;
   [...text].forEach((ch) => {
     const span = document.createElement("span");
-    span.className = "letter" + (ch === " " ? " space" : "");
+    span.className = "bounce-letter" + (ch === " " ? " space" : "");
     span.textContent = ch === " " ? "\u00A0" : ch;
     span.style.animationDelay = `${delay}s`;
     delay += 0.045;
